@@ -8,6 +8,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class BoruvkaTests {
 
     private static int[][] matrix7x7 = new int [][] {   {0, 7 , 0 , 4 , 0 , 0 , 0 },
@@ -27,12 +30,22 @@ public class BoruvkaTests {
                                                         {51, 0 , 0 , 0 , 8 , 0 , 0 , 25},
                                                         {31, 21, 0 , 0 , 46, 0 , 25, 0 }};
 
-//    private static Graph graph;
-//
-//    @BeforeClass
-//    public static void init() {
-//        graph = new Graph(7, matrix7x7);
-//    }
+    private static Graph graph7x7, graph8x8;
+
+    private static List<Edge> edges7x7, edges8x8;
+
+    @BeforeClass
+    public static void init() {
+        graph7x7 = new Graph(7, matrix7x7);
+        graph8x8 = new Graph(8, matrix8x8);
+        edges8x8 = Arrays.asList(new Edge(29, 0, 2),
+                                new Edge(21, 1, 7),
+                                new Edge(18, 3, 5),
+                                new Edge(34, 3, 4),
+                                new Edge(25, 6, 7),
+                                new Edge(31, 0, 7),
+                                new Edge(46, 4, 7));
+    }
 
     private Edge[] result = null;
 
@@ -40,10 +53,9 @@ public class BoruvkaTests {
     public void printResult() {
         if (result != null) {
             for (Edge e : result) {
-                if (e == null)
-                    System.out.println("NULL");
-                else
-                    System.out.println("(" + e.getLVert() + ")-(" + e.getRVert() + "): " +  + e.getWeight());
+                if (e != null) {
+                    System.out.println("(" + e.getLVert() + ")-(" + e.getRVert() + "): " + +e.getWeight());
+                }
             }
         }
     }
@@ -72,6 +84,8 @@ public class BoruvkaTests {
         Graph graph = new Graph(8, matrix8x8);
         Boruvka boruvka = new Boruvka(graph);
         result = boruvka.runBoruvka();
+        System.out.println(Arrays.asList(result).containsAll(edges8x8));
+//        Arrays.asList(result).contains(new Edge(21, 1, 7));
     }
 
 
