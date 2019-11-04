@@ -1,74 +1,128 @@
 package com.dco;
 
 import com.dco.algorithms.Boruvka;
+import com.dco.algorithms.Kruskal;
+import com.dco.algorithms.MSTAlgorithm;
+import com.dco.algorithms.Prim;
 import com.dco.ds.Graph;
+import com.dco.ds.Matrix;
 
 import java.util.Random;
 import java.util.Scanner;
 
-public class Main {
+enum Menu{
 
+    MAIN(
+            "1 - enter adjacency matrix size\n" +
+            "2 - generate adjacency matrix\n" +
+            "3 - choose algorithm and find MST\n" +
+            "4 - print matrix\n" +
+            "0 - exit program\n" +
+            "Choose action: "),
+    ALGORITHM(
+            "1 - find MST using Bouravka's algorithm\n" +
+            "2 - find MST using Kurskal's algorithm\n" +
+            "3 - find MST using Prim's algorithm\n" +
+            "Choose option: "),
+    MATRIX(
+            "1 - generate matrix\n" +
+            "2 - use matrix 7x7 template\n" +
+            "2 - use matrix 8x8 template\n" +
+            "Choose option: ");
+
+    private String menu;
+
+    Menu(String menu) {
+        this.menu = menu;
+    }
+
+    public String getMenu(){ return menu;}
+}
+
+public class Main {
 
     public static void main(String[] args) {
         int n = 0;
-        int[][] matrix = null;
+//        int[][] matrix = null;
+        Matrix matrix = null;
         Graph graph = null;
+        MSTAlgorithm mstAlgorithm = null;
+
 
         Scanner sc = new Scanner(System.in);
         int action;
 
         do {
-            System.out.println("1 - enter adjacency matrix size (n, m)");
-            System.out.println("2 - choose minimum spanning tree building algorithm");
-            System.out.println("3 - find minimum spanning tree");
-            System.out.println("4 - print matrix");
-            System.out.println("0 - exit program");
-            System.out.print("Choose action: ");
+            System.out.println(Menu.MAIN.getMenu());
 
             if (!sc.hasNextInt()) {
                 System.out.println("Enter valid int action");
             } else {
+
                 action = sc.nextInt();
 
                 switch (action) {
                     case 1:
                         System.out.print("Enter matrix size: ");
                         n = sc.nextInt();
-                        matrix = new int[n][n];
-//                        System.out.println("Enter matrix");
-//                        for(int i = 0; i < n; i++) {
-//                            for(int j = 0; j < n; j++) {
-//                                matrix[i][j] = sc.nextInt();
-//                            }
-//                        }
+                        matrix = new Matrix(n);
+//                        matrix = new int[n][n];
                         break;
 
                     case 2:
-                        System.out.println("Generated matrix");
-                        Random r = new Random();
-
-                        for(int i = 0; i < n; i++) {
-                            for(int j = 0; j < n; j++) {
-                                matrix[i][j] = r.nextInt(2) * r.nextInt(10);
-                                System.out.print(matrix[i][j] + " ");
-                            }
-                            System.out.println();
+                        if (n <= 0 | matrix == null) {
+                            System.out.println("Enter valid matrix size first");
+                            break;
                         }
 
-                        graph = new Graph(n, matrix);
+                        System.out.println("Generated matrix");
+
+                        matrix.generateMatrix();
+
+                        matrix.printMatrix();
+
+                        graph = new Graph(n, matrix.getMatrix());
+
                         break;
 
                     case 3:
-                        assert graph != null;
-                        Boruvka boruvka = new Boruvka(graph);
-                        boruvka.runBoruvka();
+                        if (graph == null) {
+                            System.out.println("Generate matrix first");
+                            break;
+                        }
+                        System.out.println(Menu.ALGORITHM.getMenu());
+                        int option = sc.nextInt();
+
+                        do {
+                            switch (option) {
+                                case 1:
+                                    mstAlgorithm = new Boruvka(graph);
+                                    break;
+
+                                case 2:
+                                    mstAlgorithm = new Kruskal(graph);
+                                    break;
+
+//                                case 3:
+//                                    mstAlgorithm = new Prim(graph);
+//                                    break;
+
+                                default:
+                                    System.out.println("Choose valid option");
+                                    break;
+
+                            }
+                        } while (mstAlgorithm == null);
+
+                        mstAlgorithm.findMST();
                         break;
 
                     case 4:
-//                        Matrix matr = new Matrix(n);
-//                        matr.readMatrix();
-//                        matr.printMatrix();
-
+                        if (mstAlgorithm != null) {
+                            mstAlgorithm.printMST();
+                        } else {
+                            System.out.println("Choose and run MST algorithm first");
+                        }
                         break;
 
                     case 0:
@@ -76,6 +130,7 @@ public class Main {
                         break;
 
                     default:
+                        System.out.println("Choose valid action");
                         break;
                 }
             }

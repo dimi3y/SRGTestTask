@@ -1,4 +1,4 @@
-package com.dco.ds;
+package com.dco.algorithms.uf;
 
 public class UnionFind {
 

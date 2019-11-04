@@ -5,15 +5,18 @@ import lombok.Setter;
 
 import java.util.Objects;
 
-public class Edge {
+public class Edge{
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private int weight;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private int lVert;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private int rVert;
 
     public Edge(int weight, int lVert, int rVert) {
@@ -35,5 +38,14 @@ public class Edge {
     @Override
     public int hashCode() {
         return Objects.hash(weight, lVert, rVert);
+    }
+
+    @Override
+    public String toString() {
+        return "Edge{" +
+                "weight=" + weight +
+                ", lVert=" + lVert +
+                ", rVert=" + rVert +
+                '}';
     }
 }
